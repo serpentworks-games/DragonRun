@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿// UIManager.cs
+// Author:
+//       Alexis Barta <alexisbarta@outlook.com>
+// Copyright (c) 2018 SerpentWorks Games
+// Description: Manages the UI and all menus there in
+//
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

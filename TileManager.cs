@@ -1,79 +1,110 @@
-﻿using System.Collections;
+﻿// TileManager.cs
+// Author:
+//       Alexis Barta <alexisbarta@outlook.com>
+// Copyright (c) 2018 
+// Description: This script manages the tile spawning.
+//
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
 
 
-public class TileManager : MonoBehaviour {
-
+public class TileManager : MonoBehaviour
+{
+	//Arrays to hold the tile prefabs, assigned in editor
 	public GameObject[] tilesPrefabs;
 	public GameObject[] largeTilesPrefabs;
 
+	//What is the current title spawned
 	public GameObject currentTile;
 
-	public float tileFallSpeed;
-
-	private Stack<GameObject> leftTiles = new Stack<GameObject>();
+	//Path tiles that attach on the left
+	private Stack<GameObject> leftTiles = new Stack<GameObject> ();
 
 	public Stack<GameObject> LeftTiles {
 		get { return leftTiles; }
 		set { leftTiles = value; }
 	}
 
-	private Stack<GameObject> topTiles = new Stack<GameObject>();
+	//Path tiles that attach on the top(forward)
+	private Stack<GameObject> topTiles = new Stack<GameObject> ();
 
 	public Stack<GameObject> TopTiles {
 		get { return topTiles; }
 		set { topTiles = value; }
 	}
 
-	private Stack<GameObject> rightTiles = new Stack<GameObject>();
+	//Path titles that attach on the right NOT IMPLIMENTED
+	/*private Stack<GameObject> rightTiles = new Stack<GameObject> ();
 
 	public Stack<GameObject> RightTiles {
 		get { return rightTiles; }
 		set { rightTiles = value; }
+	}*/
+
+	//Large Platform: TwinHeads, attaches on the left
+	private Stack<GameObject> lt_TwinHeads = new Stack<GameObject> ();
+
+	public Stack<GameObject> LT_TwinHeads {
+		get { return lt_TwinHeads; }
+		set { lt_TwinHeads = value; }
 	}
 
-	private Stack<GameObject> leftTilesLarge = new Stack<GameObject>();
+	//Large Platfrom: Snowdrifts, attaches on the left
+	private Stack<GameObject> lt_Snowdrifts = new Stack<GameObject> ();
 
-	public Stack<GameObject> LeftTilesLarge {
-		get { return leftTilesLarge; }
-		set { leftTilesLarge = value; }
+	public Stack<GameObject> LT_Snowdrifts {
+		get { return lt_Snowdrifts; }
+		set { lt_Snowdrifts = value; }
 	}
 
-	private Stack<GameObject> topTilesLarge = new Stack<GameObject>();
+	//Large Platform: Island, attaches on the top
+	private Stack<GameObject> tl_Island = new Stack<GameObject> ();
 
-	public Stack<GameObject> TopTilesLarge {
-		get { return topTilesLarge; }
-		set { topTilesLarge = value; }
+	public Stack<GameObject> TL_Island {
+		get { return tl_Island; }
+		set { tl_Island = value; }
 	}
 
-	private Stack<GameObject> rightTilesLarge = new Stack<GameObject>();
+	//Large Platform: Lava, attaches on the top
+	private Stack<GameObject> tl_Lava = new Stack<GameObject> ();
+
+	public Stack<GameObject> TL_Lava {
+		get { return tl_Lava; }
+		set { tl_Lava = value; }
+	}
+
+	//Large titles that attache on the right NOT IMPLIMENTED
+	/*private Stack<GameObject> rightTilesLarge = new Stack<GameObject> ();
 
 	public Stack<GameObject> RightTilesLarge {
 		get { return rightTilesLarge; }
 		set { rightTilesLarge = value; }
-	}
-		
+	}*/
 
+	//Singleton instance of the Tilemanager, so there's only ever one
 	private static TileManager instance;
 
-	public static TileManager Instance { get
-		{
-			if (instance == null)
-			{
+	public static TileManager Instance {
+		get {
+			if (instance == null) {
 				instance = GameObject.FindObjectOfType<TileManager> ();
 			}
 			return instance;
 		}
 	}
 
+	//How many tiles spawn before a large tile spawns
 	private int tileCount;
 
+	//Reference to the Game Manager script
 	private GameManager gameManager;
 
-	// Use this for initialization
-	void Start () {
+
+	void Start ()
+	{
 		gameManager = FindObjectOfType<GameManager> ();
 		CreateTiles (100);
 		CreateLargeTiles (25);
@@ -83,65 +114,70 @@ public class TileManager : MonoBehaviour {
 
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 
-	}
-
-	public void CreateTiles(int amount){
+	//Creates the Path Tiles
+	public void CreateTiles (int amount)
+	{
 		for (int i = 0; i < amount; i++) {
 			
-			leftTiles.Push (Instantiate(tilesPrefabs[0])); //Left Tiles
-			topTiles.Push (Instantiate(tilesPrefabs[1])); //Top Tiles
-			//rightTiles.Push (Instantiate (tilesPrefabs[2]));
+			leftTiles.Push (Instantiate (tilesPrefabs [0])); //Left Path Tiles
+			topTiles.Push (Instantiate (tilesPrefabs [1])); //Top Path Tiles
+
 
 			leftTiles.Peek ().name = "LeftTile";
 			topTiles.Peek ().name = "TopTile";
-			//rightTiles.Peek ().name = "RightTile";
 
 			leftTiles.Peek ().SetActive (false);
 			topTiles.Peek ().SetActive (false);
-			//rightTiles.Peek ().SetActive (false);
+
 		}
 	}
 
-	public void CreateLargeTiles(int amount){
+	//Creates the Large Tiles
+	public void CreateLargeTiles (int amount)
+	{
 		for (int i = 0; i < amount; i++) {
 
-			leftTilesLarge.Push (Instantiate(largeTilesPrefabs[0])); //Large Left Tile
-			topTilesLarge.Push (Instantiate(largeTilesPrefabs[1])); //Large Top Tile
-		//	rightTilesLarge.Push (Instantiate (tilesPrefabs[2]));
+			lt_TwinHeads.Push (Instantiate (largeTilesPrefabs [0])); //TwinHeads Tile
+			lt_Snowdrifts.Push (Instantiate (largeTilesPrefabs [1])); //Snowdrift Tile
+			tl_Island.Push (Instantiate (largeTilesPrefabs [2])); //Island Tile
+			tl_Lava.Push (Instantiate (largeTilesPrefabs [3])); //Lava Tile
 
-			leftTilesLarge.Peek ().name = "LeftTileLarge";
-			topTilesLarge.Peek ().name = "TopTileLarge";
-			//rightTilesLarge.Peek ().name = "RightTile";
+			lt_TwinHeads.Peek ().name = "LT_TwinHeads";
+			lt_Snowdrifts.Peek ().name = "LT_Snowdrifts";
+			tl_Island.Peek ().name = "TL_Island";
+			tl_Lava.Peek ().name = "TL_Lava";
 
-			leftTilesLarge.Peek ().SetActive (false);
-			topTilesLarge.Peek ().SetActive (false);
-			//rightTilesLarge.Peek ().SetActive (false);
+			lt_TwinHeads.Peek ().SetActive (false);
+			lt_Snowdrifts.Peek ().SetActive (false);
+			tl_Island.Peek ().SetActive (false);
+			tl_Lava.Peek ().SetActive (false);
+
 
 		}
 	}
 
 	public void SpawnTile ()
 	{
-
+		//These make sure we always have tiles to pull from, even if they do not get put back into the stack
 		if (leftTiles.Count == 0 || topTiles.Count == 0) {
 			CreateTiles (10);
-			//Debug.LogAssertion ("Left or top tiles empty! Spawning more!");
 		}
 
-		if (leftTilesLarge.Count == 0 || topTilesLarge.Count == 0) {
+		if (lt_TwinHeads.Count == 0 || lt_Snowdrifts.Count == 0) {
 			CreateLargeTiles (10);
 		}
 
-		//When you spawn a tile, increase the tile count
-		gameManager.tileCount++;
+		if (tl_Island.Count == 0 || tl_Lava.Count == 0) {
+			CreateLargeTiles (10);
+		}
 
-		//Get random range for tile 
+
+		//Get random range for path tile 
 		int randomIndex = Random.Range (0, 2);
+
+		//Get random range for large tile
+		int randomIndexForLarge = Random.Range (0, 2);
 
 		//Regular sized tiles
 		if (randomIndex == 0) {
@@ -150,34 +186,63 @@ public class TileManager : MonoBehaviour {
 			tmp.transform.position = currentTile.transform.GetChild (0).transform.GetChild (randomIndex).position;
 			currentTile = tmp;
 
+			//When you spawn a path tile, increase the tile count
+			gameManager.tileCount++;
+
 		} else if (randomIndex == 1) {
 			
 			GameObject tmp = topTiles.Pop ();
 			tmp.SetActive (true);
 			tmp.transform.position = currentTile.transform.GetChild (0).transform.GetChild (randomIndex).position;
 			currentTile = tmp;
+
+			//When you spawn a path tile, increase the tile count
+			gameManager.tileCount++;
 		} 
 
 		//Large tiles
-		if (gameManager.tileCount > 35 && gameManager.tileCount < 60){
-			if (randomIndex == 0) { //BottomLeft Anchor
-				GameObject tmp = leftTilesLarge.Pop ();
-				tmp.SetActive (true);
-				tmp.transform.position = currentTile.transform.GetChild (0).transform.GetChild (randomIndex).position;
-				currentTile = tmp;
+		if (gameManager.tileCount > 35 && gameManager.tileCount < 60) {
+			
+			if (randomIndex == 0) {
+				// Spawn a "Left" tile
+				if (randomIndexForLarge == 0) {
+					//Spawan a Twins Heads Tile
+					GameObject tmp = lt_TwinHeads.Pop ();
+					tmp.SetActive (true);
+					tmp.transform.position = currentTile.transform.GetChild (0).transform.GetChild (randomIndex).position;
+					currentTile = tmp;
 
-			} else if (randomIndex == 1) { //TopLeft Anchor
+				} else if (randomIndexForLarge == 1) { 
+					//Spawn a Snowdrifts Tile
+					GameObject tmp = lt_Snowdrifts.Pop ();
+					tmp.SetActive (true);
+					tmp.transform.position = currentTile.transform.GetChild (0).transform.GetChild (randomIndex).position;
+					currentTile = tmp;
+				}
 
-				GameObject tmp = topTilesLarge.Pop ();
-				tmp.SetActive (true);
-				tmp.transform.position = currentTile.transform.GetChild (0).transform.GetChild (randomIndex).position;
-				currentTile = tmp;
+			} else if (randomIndex == 1) { 
+				// Spawn a "Top" tile
+				if (randomIndexForLarge == 0) {
+					//Spawan a Twins Heads Tile
+					GameObject tmp = tl_Island.Pop ();
+					tmp.SetActive (true);
+					tmp.transform.position = currentTile.transform.GetChild (0).transform.GetChild (randomIndex).position;
+					currentTile = tmp;
+
+				} else if (randomIndexForLarge == 1) { 
+					//Spawn a Lava Tile
+					GameObject tmp = tl_Lava.Pop ();
+					tmp.SetActive (true);
+					tmp.transform.position = currentTile.transform.GetChild (0).transform.GetChild (randomIndex).position;
+					currentTile = tmp;
+				}
+
 			}
-
 			// Rest the tile count to 0 after you spawn a large tile
 			gameManager.tileCount = 0;
 		}
 
+		//Generate a number for whether the tile spawns a pick up
 		int spawnPickup = Random.Range (0, 10);
 
 		if (spawnPickup > 0 && spawnPickup < 3) {

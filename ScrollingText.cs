@@ -1,4 +1,12 @@
-﻿using System.Collections;
+﻿// ScrollingText.cs
+// Author:
+//       Alexis Barta <alexisbarta@outlook.com>
+// Copyright (c) 2018 SerpentWorks Games
+// Description: Scrolling point text when a player passes over a gem
+// May or may not be staying, as it seems to have broken
+//
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +29,7 @@ public class ScrollingText : MonoBehaviour {
 
 		transform.Translate (dir * translation);
 
-		//transform.LookAt (transform.position.normalized - Camera.main.transform.position.normalized);
+		transform.LookAt (transform.position.normalized - Camera.main.transform.position.normalized);
 	}
 
 	public void Initialize(float speed, Vector3 dir, float fadeTime){

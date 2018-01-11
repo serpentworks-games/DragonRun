@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿// TileCheck.cs
+// Author:
+//       Alexis Barta <alexisbarta@outlook.com>
+// Copyright (c) 2018 SerpentWorks Games
+// Description: THIS IS OBSCELETE - Checks to see if the player could turn right for a right tile
+//
+
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,3 +31,4 @@ public class TileCheck : MonoBehaviour {
 		}
 	}
 }
+*/

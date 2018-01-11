@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿// CameraScript.cs
+// Author:
+//       Alexis Barta <alexisbarta@outlook.com>
+// Copyright (c) 2018 SerpentWorks Games
+// Description: Basic camera follow script
+//
+
+using UnityEngine;
 using System.Collections;
 
 public class CameraScript : MonoBehaviour {
