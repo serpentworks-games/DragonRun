@@ -61,7 +61,7 @@ public class UIManager : MonoBehaviour {
 	}
 
 	void UpdateScoreText(){
-		scoreText.text = "Score: " + Mathf.Round (gameManager.score);
+		scoreText.text = Mathf.Round (gameManager.score).ToString ();
 	}
 
 	public void CreateFloatingText(Vector3 position, string text){
