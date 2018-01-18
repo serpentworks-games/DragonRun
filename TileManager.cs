@@ -36,14 +36,6 @@ public class TileManager : MonoBehaviour
 		set { topTiles = value; }
 	}
 
-	//Path titles that attach on the right NOT IMPLIMENTED
-	/*private Stack<GameObject> rightTiles = new Stack<GameObject> ();
-
-	public Stack<GameObject> RightTiles {
-		get { return rightTiles; }
-		set { rightTiles = value; }
-	}*/
-
 	//Large Platform: TwinHeads, attaches on the left
 	private Stack<GameObject> lt_TwinHeads = new Stack<GameObject> ();
 
@@ -76,14 +68,6 @@ public class TileManager : MonoBehaviour
 		set { tl_Lava = value; }
 	}
 
-	//Large titles that attache on the right NOT IMPLIMENTED
-	/*private Stack<GameObject> rightTilesLarge = new Stack<GameObject> ();
-
-	public Stack<GameObject> RightTilesLarge {
-		get { return rightTilesLarge; }
-		set { rightTilesLarge = value; }
-	}*/
-
 	//Singleton instance of the Tilemanager, so there's only ever one
 	private static TileManager instance;
 
@@ -113,6 +97,7 @@ public class TileManager : MonoBehaviour
 			SpawnTile ();
 
 		}
+			
 	}
 
 	//Creates the Path Tiles
@@ -255,5 +240,23 @@ public class TileManager : MonoBehaviour
 					
 			}
 		}
+
+		//Generate a number for what stone is spawned on the path tiles
+		int spawnStone = Random.Range (0, 3);
+
+		if(currentTile.GetComponent<Tile> ().stonesList != null){
+			GameObject stones = currentTile.GetComponent<Tile> ().stonesList;
+			if(spawnStone == 0){
+				stones.gameObject.transform.GetChild (0).transform.gameObject.SetActive (true);
+			} else if(spawnStone == 1){
+				stones.gameObject.transform.GetChild (1).transform.gameObject.SetActive (true);
+			} else if(spawnStone == 2){
+				stones.gameObject.transform.GetChild (2).transform.gameObject.SetActive (true);
+			} 
+		} else {
+			// do nothing bc you aren't a path tile
+		}
 	}
+
+
 }

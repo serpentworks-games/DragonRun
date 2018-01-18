@@ -23,7 +23,10 @@ public class GameManager : MonoBehaviour {
 	public int redGemPoints;
 	//How fast the tiles fall
 	public float tileFallSpeed;
+	//If the player has transitioned from the main menu to the game
+	public bool gameStarted;
 
+	public GameObject uiCanvas;
 
 	private Player player;
 	private TileManager tileManager;
@@ -42,9 +45,10 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		uiCanvas.SetActive (true);
 		player = FindObjectOfType<Player> ();
 		tileManager = FindObjectOfType<TileManager> ();
-
+		gameStarted = false;
 		score = 0;
 		tileCount = 0;
 	}

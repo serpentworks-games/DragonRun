@@ -13,20 +13,20 @@ using UnityEngine.SceneManagement;
 
 
 public class UIManager : MonoBehaviour {
-
-	public GameManager gameManager;
-	public Player player;
-	public GameObject resetButton;
+	
 	public Text scoreText;
-	public GameObject scrollingTextPanel;
-
 	public Text gameOverScoreText;
 	public Text highScoreText;
 
-	public GameObject floatingText;
-	public float speed;
-	public Vector3 dir;
-	public float fadeTime;
+	public GameObject resetGameCanvas;
+	public GameObject scoreCanvas;
+	public GameObject mainUICanvas;
+	public GameObject tutorialText;
+
+	public Player player;
+	public GameManager gameManager;
+	public AudioListener gameAudio;
+
 
 	private static UIManager instance;
 	private int highScore;
@@ -43,7 +43,10 @@ public class UIManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		resetButton.SetActive (false);
+		resetGameCanvas.SetActive (false);
+		scoreCanvas.SetActive (false);
+		mainUICanvas.SetActive (true);
+		tutorialText.SetActive (false);
 	}
 
 	// Update is called once per frame
@@ -57,31 +60,60 @@ public class UIManager : MonoBehaviour {
 
 	public void ResetGame(){
 		SceneManager.LoadScene ("DragonRun");
-		resetButton.SetActive (false);
+		resetGameCanvas.SetActive (false);
+		scoreCanvas.SetActive (false);
+		mainUICanvas.SetActive (true);
+		gameManager.gameStarted = false;
+
 	}
 
+	public void ExitGame(){
+		Application.Quit ();
+	}
+
+	public void HighScoreList(){
+		//This will show a panel of highscores eventually
+		Debug.Log ("There is nothing here right now!");
+	}
+
+	public void PlayGame(){
+		gameManager.gameStarted = true;
+		scoreCanvas.SetActive (true);
+		mainUICanvas.SetActive (false);
+		tutorialText.SetActive (true);
+		gameManager.gameStarted = true;
+
+	}
+
+	public void DisableAudio(bool value){
+		gameAudio.enabled = value;
+
+	}
+
+	public void ClearTutorialText(){
+		tutorialText.GetComponent<Animator> ().SetBool ("fadeOut", true);
+		TutorialTextFadeOut ();
+	}
 	void UpdateScoreText(){
 		scoreText.text = Mathf.Round (gameManager.score).ToString ();
 	}
-
-	public void CreateFloatingText(Vector3 position, string text){
-			GameObject sct = Instantiate (floatingText, position, Quaternion.identity);
-
-			sct.transform.SetParent (scrollingTextPanel.transform);
-			sct.GetComponent<RectTransform> ().localScale = new Vector3 (1,1,1);
-			sct.GetComponent<ScrollingText> ().Initialize (speed, dir, fadeTime);
-			sct.GetComponent<Text> ().text = text;
-
-	}
-
+		
 	void GameOver(){
+		mainUICanvas.SetActive (false);
+
 		highScore = PlayerPrefs.GetInt ("HighScore",0);
 		if(gameManager.score > highScore){
 			
 			PlayerPrefs.SetInt ("HighScore", (int)gameManager.score);
 		}
-		resetButton.SetActive (true);
+		resetGameCanvas.SetActive (true);
 		gameOverScoreText.text = Mathf.Round (gameManager.score).ToString();
 		highScoreText.text = PlayerPrefs.GetInt ("HighScore", 0).ToString ();
+	}
+		
+	IEnumerator TutorialTextFadeOut(){
+		yield return new WaitForSeconds (1.3f);
+		tutorialText.SetActive (false);
+		tutorialText.GetComponent<Text> ().color = new Color(255,255,255,255);
 	}
 }

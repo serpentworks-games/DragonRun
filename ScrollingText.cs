@@ -1,4 +1,4 @@
-﻿// ScrollingText.cs
+﻿/*/// ScrollingText.cs
 // Author:
 //       Alexis Barta <alexisbarta@outlook.com>
 // Copyright (c) 2018 SerpentWorks Games
@@ -60,3 +60,4 @@ public class ScrollingText : MonoBehaviour {
 		Destroy (gameObject);
 	}
 }
+*/

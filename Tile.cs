@@ -16,6 +16,7 @@ public class Tile : MonoBehaviour {
 
 	//The pick up on that tile
 	public GameObject pickUp;
+	public GameObject stonesList;
 
 
 	void Awake(){
@@ -56,12 +57,18 @@ public class Tile : MonoBehaviour {
 			TileManager.Instance.LeftTiles.Push (gameObject);
 			gameObject.GetComponent<Rigidbody> ().isKinematic = true;
 			gameObject.SetActive (false);
+			stonesList.transform.GetChild (0).gameObject.SetActive (false);
+			stonesList.transform.GetChild (1).gameObject.SetActive (false);
+			stonesList.transform.GetChild (2).gameObject.SetActive (false);
 				break;
 
 		case "TopTile":
 			TileManager.Instance.TopTiles.Push (gameObject);
 			gameObject.GetComponent<Rigidbody> ().isKinematic = true;
 			gameObject.SetActive (false);
+			stonesList.transform.GetChild (0).gameObject.SetActive (false);
+			stonesList.transform.GetChild (1).gameObject.SetActive (false);
+			stonesList.transform.GetChild (2).gameObject.SetActive (false);
 				break;
 
 		case "LT_TwinHeads":

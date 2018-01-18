@@ -8,8 +8,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NUnit.Framework.Constraints;
-using NUnit.Framework;
 
 public class Player : MonoBehaviour {
 
@@ -36,27 +34,30 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetMouseButtonDown (0) && !isDead){
-			isMoving = true;
-	
-			if (dir == Vector3.forward) {
-				dir = Vector3.left;
-				
-				transform.GetChild (0).rotation = Quaternion.LookRotation (dir);
-				
-				
-			} else {
-				dir = Vector3.forward;
-				
-				transform.GetChild (0).rotation = Quaternion.LookRotation (dir);
-				
+		if (gameManager.gameStarted == true) {
+			playerAnim.SetBool ("playGame", true);
+			if (Input.GetMouseButtonDown (0) && !isDead) {
+				isMoving = true;
+			
+				if (dir == Vector3.forward) {
+					dir = Vector3.left;
+					
+					transform.GetChild (0).rotation = Quaternion.LookRotation (dir);
+					
+					
+				} else {
+					dir = Vector3.forward;
+					
+					transform.GetChild (0).rotation = Quaternion.LookRotation (dir);
+					
+				}
+				playerAnim.SetBool ("isMoving", true);
 			}
-			playerAnim.SetBool ("isMoving", true);
-		}
-		
-		float amountToMove = speed * Time.deltaTime;
-
-		transform.Translate (dir * amountToMove);
+			
+			float amountToMove = speed * Time.deltaTime;
+			
+			transform.Translate (dir * amountToMove);
+		} 
 
 
 	}
@@ -70,7 +71,7 @@ public class Player : MonoBehaviour {
 			gameManager.score+= gameManager.blueGemPoints;
 			other.gameObject.SetActive (false);
 			Instantiate (blueGemParticles, transform.position, Quaternion.identity);
-			UIManager.Instance.CreateFloatingText (other.transform.position, "+1");
+			//UIManager.Instance.CreateFloatingText (other.transform.position, "+1");
 
 		} else if( other.gameObject.tag == "RedGem"){
 			//When a player hits a 'red gem'
@@ -78,7 +79,7 @@ public class Player : MonoBehaviour {
 			gameManager.score+= gameManager.redGemPoints;
 			other.gameObject.SetActive (false);
 			Instantiate (redGemParticles, transform.position, Quaternion.identity);
-			UIManager.Instance.CreateFloatingText (other.transform.position, "+5");
+			//UIManager.Instance.CreateFloatingText (other.transform.position, "+5");
 		}
 	}
 
