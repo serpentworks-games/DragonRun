@@ -22,6 +22,11 @@ public class Tile : MonoBehaviour {
 	void Awake(){
 		//Find the first pick up on the object
 		pickUp = this.transform.GetChild (1).gameObject;
+		if (this.transform.childCount == 3) {
+			stonesList = this.transform.GetChild (2).gameObject;
+		} else {
+			// do nothing
+		}
 	}
 
 	void Start () {
@@ -29,7 +34,6 @@ public class Tile : MonoBehaviour {
 		fallDelay = GameManager.Instance.tileFallSpeed;
 
 	}
-
 
 	void OnTriggerExit(Collider other){
 

@@ -90,8 +90,8 @@ public class TileManager : MonoBehaviour
 	void Start ()
 	{
 		gameManager = FindObjectOfType<GameManager> ();
-		CreateTiles (100);
-		CreateLargeTiles (25);
+		CreateTiles (50);
+		//CreateLargeTiles (0);
 
 		for (int i = 0; i < 30; i++) {
 			SpawnTile ();
@@ -185,8 +185,30 @@ public class TileManager : MonoBehaviour
 			gameManager.tileCount++;
 		} 
 
+		//Generate a number for what stone is spawned on the path tiles
+		int spawnStone = Random.Range (0, 3);
+
+		if (currentTile.GetComponent<Tile> ().stonesList != null) {
+
+			GameObject stones = currentTile.GetComponent<Tile> ().stonesList;
+			if (spawnStone == 0) {
+				stones.gameObject.transform.GetChild (0).transform.gameObject.SetActive (true);
+			} else if (spawnStone == 1) {
+				stones.gameObject.transform.GetChild (1).transform.gameObject.SetActive (true);
+			} else if (spawnStone == 2) {
+				stones.gameObject.transform.GetChild (2).transform.gameObject.SetActive (true);
+			} else {
+
+				// Do nothing!
+			}
+		} else {
+			if (currentTile.transform.childCount == 2) {
+			}
+		}
+
+
 		//Large tiles
-		if (gameManager.tileCount > 35 && gameManager.tileCount < 60) {
+		if (gameManager.tileCount > 45 && gameManager.tileCount < 60) {
 			
 			if (randomIndex == 0) {
 				// Spawn a "Left" tile
@@ -241,22 +263,9 @@ public class TileManager : MonoBehaviour
 			}
 		}
 
-		//Generate a number for what stone is spawned on the path tiles
-		int spawnStone = Random.Range (0, 3);
-
-		if(currentTile.GetComponent<Tile> ().stonesList != null){
-			GameObject stones = currentTile.GetComponent<Tile> ().stonesList;
-			if(spawnStone == 0){
-				stones.gameObject.transform.GetChild (0).transform.gameObject.SetActive (true);
-			} else if(spawnStone == 1){
-				stones.gameObject.transform.GetChild (1).transform.gameObject.SetActive (true);
-			} else if(spawnStone == 2){
-				stones.gameObject.transform.GetChild (2).transform.gameObject.SetActive (true);
-			} 
-		} else {
-			// do nothing bc you aren't a path tile
+	
 		}
-	}
+
 
 
 }

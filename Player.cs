@@ -15,11 +15,14 @@ public class Player : MonoBehaviour {
 	public bool isDead;
 	public ParticleSystem blueGemParticles;
 	public ParticleSystem redGemParticles;
+	public LayerMask groundLayer;
+	public Transform contactPoint;
 
 	private Vector3 dir;
 	private bool isMoving;
 	private Animator playerAnim;
 	private GameManager gameManager;
+	private GameObject projectileSpawn;
 
 	// Use this for initialization
 	void Start () {
@@ -30,10 +33,18 @@ public class Player : MonoBehaviour {
 		playerAnim.SetBool ("isMoving",false);
 		gameManager = FindObjectOfType<GameManager> ();
 		speed = gameManager.playerSpeed;
+		projectileSpawn = GameObject.Find ("ProjectileSpawn");
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (!Grounded () && gameManager.gameStarted == true) {
+			isDead = true;
+			isMoving = false;
+			GetComponent<CapsuleCollider> ().enabled = false;
+			playerAnim.SetBool ("isDead", true);
+		}
+			
 		if (gameManager.gameStarted == true) {
 			playerAnim.SetBool ("playGame", true);
 			if (Input.GetMouseButtonDown (0) && !isDead) {
@@ -62,6 +73,15 @@ public class Player : MonoBehaviour {
 
 	}
 
+	void OnCollision(Collision col){
+		if(col.gameObject.layer == 8){
+			isDead = true;
+			isMoving = false;
+			GetComponent<CapsuleCollider> ().enabled = false;
+			playerAnim.SetBool ("isDead", true);
+		}
+	}
+
 	//Pick up behavior
 	void OnTriggerEnter(Collider other){
 		
@@ -70,36 +90,30 @@ public class Player : MonoBehaviour {
 
 			gameManager.score+= gameManager.blueGemPoints;
 			other.gameObject.SetActive (false);
-			Instantiate (blueGemParticles, transform.position, Quaternion.identity);
-			//UIManager.Instance.CreateFloatingText (other.transform.position, "+1");
+			Instantiate (blueGemParticles, projectileSpawn.transform.position, Quaternion.identity);
 
 		} else if( other.gameObject.tag == "RedGem"){
 			//When a player hits a 'red gem'
 
 			gameManager.score+= gameManager.redGemPoints;
 			other.gameObject.SetActive (false);
-			Instantiate (redGemParticles, transform.position, Quaternion.identity);
-			//UIManager.Instance.CreateFloatingText (other.transform.position, "+5");
+			Instantiate (redGemParticles, projectileSpawn.transform.position, Quaternion.identity);
 		}
 	}
+		
+	//Checks to see if the player is grounded
+	private bool Grounded(){
+		
+		Collider[] colliders = Physics.OverlapSphere (contactPoint.position, 0.3f, groundLayer);
 
-	//Handles death
-	void OnTriggerExit(Collider other){
+		for (int i = 0; i < colliders.Length; i++) {
+			if (colliders[i].gameObject != gameObject) {
 
-		if (other.gameObject.tag == "Tile") {
-
-			RaycastHit hit;
-			Ray downRay = new Ray (transform.position, -Vector3.up);
-			if (!Physics.Raycast (downRay, out hit)) {
-				isDead = true;
-				isMoving = false;
-				GetComponent<CapsuleCollider> ().enabled = false;
-				playerAnim.SetBool ("isDead",true);
-
+				return true;
 			}
-		}	
+		}
+
+		return false;
 	}
 		
-
-
 }
