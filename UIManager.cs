@@ -14,15 +14,19 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour {
 	
+    [Header("Text Elements")]
 	public Text scoreText;
 	public Text gameOverScoreText;
 	public Text highScoreText;
 
+    [Header("Ui Elements")]
 	public GameObject resetGameCanvas;
 	public GameObject scoreCanvas;
 	public GameObject mainUICanvas;
 	public GameObject tutorialText;
+    public GameObject buttonPanel;
 
+    [Header("Misc")]
 	public Player player;
 	public GameManager gameManager;
 	public AudioListener gameAudio;
@@ -47,6 +51,7 @@ public class UIManager : MonoBehaviour {
 		scoreCanvas.SetActive (false);
 		mainUICanvas.SetActive (true);
 		tutorialText.SetActive (false);
+        buttonPanel.SetActive(true);
 	}
 
 	// Update is called once per frame
@@ -63,7 +68,8 @@ public class UIManager : MonoBehaviour {
 		resetGameCanvas.SetActive (false);
 		scoreCanvas.SetActive (false);
 		mainUICanvas.SetActive (true);
-		gameManager.gameStarted = false;
+        buttonPanel.SetActive(true);
+        gameManager.gameStarted = false;
 
 	}
 
@@ -82,8 +88,9 @@ public class UIManager : MonoBehaviour {
 		mainUICanvas.SetActive (false);
 		tutorialText.SetActive (true);
 		gameManager.gameStarted = true;
+        buttonPanel.SetActive(false);
 
-	}
+    }
 
 	public void DisableAudio(bool value){
 		gameAudio.enabled = value;
@@ -107,7 +114,9 @@ public class UIManager : MonoBehaviour {
 			PlayerPrefs.SetInt ("HighScore", (int)gameManager.score);
 		}
 		resetGameCanvas.SetActive (true);
-		gameOverScoreText.text = Mathf.Round (gameManager.score).ToString();
+        scoreCanvas.SetActive(false);
+        buttonPanel.SetActive(true);
+        gameOverScoreText.text = Mathf.Round (gameManager.score).ToString();
 		highScoreText.text = PlayerPrefs.GetInt ("HighScore", 0).ToString ();
 	}
 		

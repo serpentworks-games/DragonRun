@@ -22,7 +22,7 @@ public class Player : MonoBehaviour {
 	private bool isMoving;
 	private Animator playerAnim;
 	private GameManager gameManager;
-	private GameObject projectileSpawn;
+	private GameObject particleSpawn;
 
 	// Use this for initialization
 	void Start () {
@@ -33,7 +33,7 @@ public class Player : MonoBehaviour {
 		playerAnim.SetBool ("isMoving",false);
 		gameManager = FindObjectOfType<GameManager> ();
 		speed = gameManager.playerSpeed;
-		projectileSpawn = GameObject.Find ("ProjectileSpawn");
+		particleSpawn = GameObject.Find ("ParticleSpawnPoint");
 	}
 	
 	// Update is called once per frame
@@ -43,6 +43,7 @@ public class Player : MonoBehaviour {
 			isMoving = false;
 			GetComponent<CapsuleCollider> ().enabled = false;
 			playerAnim.SetBool ("isDead", true);
+			Debug.Log ("Dead to falling.");
 		}
 			
 		if (gameManager.gameStarted == true) {
@@ -79,6 +80,7 @@ public class Player : MonoBehaviour {
 			isMoving = false;
 			GetComponent<CapsuleCollider> ().enabled = false;
 			playerAnim.SetBool ("isDead", true);
+			Debug.Log ("Dead due to Wall!");
 		}
 	}
 
@@ -90,14 +92,14 @@ public class Player : MonoBehaviour {
 
 			gameManager.score+= gameManager.blueGemPoints;
 			other.gameObject.SetActive (false);
-			Instantiate (blueGemParticles, projectileSpawn.transform.position, Quaternion.identity);
+			Instantiate (blueGemParticles, particleSpawn.transform.position, Quaternion.identity);
 
 		} else if( other.gameObject.tag == "RedGem"){
 			//When a player hits a 'red gem'
 
 			gameManager.score+= gameManager.redGemPoints;
 			other.gameObject.SetActive (false);
-			Instantiate (redGemParticles, projectileSpawn.transform.position, Quaternion.identity);
+			Instantiate (redGemParticles, particleSpawn.transform.position, Quaternion.identity);
 		}
 	}
 		
