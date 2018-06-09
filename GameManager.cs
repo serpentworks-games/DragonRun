@@ -12,9 +12,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
 	// Game score
+    [System.NonSerialized]
 	public int score;
-	// Path tiles spawned 
-	public int tileCount;
 	// Player's speed
 	public float playerSpeed;
 	// Value of the blue gem pickups 
@@ -23,12 +22,16 @@ public class GameManager : MonoBehaviour {
 	public int redGemPoints;
 	//How fast the tiles fall
 	public float tileFallSpeed;
-	//If the player has transitioned from the main menu to the game
-	public bool gameStarted;
+    //If the player has transitioned from the main menu to the game
+    //[System.NonSerialized]
+    public bool gameStarted;
+    // Path tiles spawned 
+    [System.NonSerialized]
+    public int tileCount;
 
-	public GameObject uiCanvas;
+    public GameObject uiCanvas;
 
-	private Player player;
+    private Player player;
 	private TileManager tileManager;
 
 	//Singleton pattern for the game manager so there's only ever one
@@ -45,6 +48,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        Screen.SetResolution(768, 1024, false); //Set screen size
 		uiCanvas.SetActive (true);
 		player = FindObjectOfType<Player> ();
 		tileManager = FindObjectOfType<TileManager> ();

@@ -12,7 +12,8 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
 	public float speed;
-	public bool isDead;
+    [System.NonSerialized]
+    public bool isDead;
 	public ParticleSystem blueGemParticles;
 	public ParticleSystem redGemParticles;
 	public LayerMask groundLayer;
