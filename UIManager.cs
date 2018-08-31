@@ -11,8 +11,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-
-public class UIManager : MonoBehaviour {
+public class UIManager : MonoBehaviour 
+{
 	
     [Header("Text Elements")]
 	public Text scoreText;
@@ -37,7 +37,8 @@ public class UIManager : MonoBehaviour {
 	private static UIManager instance;
 	private int highScore;
 
-	public static UIManager Instance {
+	public static UIManager Instance 
+	{
 		get {
 			if (instance == null)
 			{
@@ -48,30 +49,34 @@ public class UIManager : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
         StartMenu();
-
-    }
+    	}
 
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		UpdateScoreText ();
-		if(player.isDead){
+		if(player.isDead
+		{
 			GameOver ();
-
 		}
 	}
 
-	public void ResetGame(){
+	public void ResetGame()
+	{
 
         StartCoroutine(ResettingGame());
     }
 
-	public void ExitGame(){
+	public void ExitGame()
+	{
 		Application.Quit ();
 	}
 
-	public void PlayGame(){
+	public void PlayGame()
+	{
 		
         buttonPanel.GetComponent<Animator>().SetTrigger("Triggered");
         mainUICanvas.GetComponent<Animator>().SetTrigger("Triggered");
@@ -81,35 +86,37 @@ public class UIManager : MonoBehaviour {
         gameManager.gameStarted = true;
         tutorialText.SetActive(true);
         tutorialText.GetComponent<Animator>().SetTrigger("fadeIn");
-
     }
 
-	public void DisableAudio(bool value){
+	public void DisableAudio(bool value)
+	{
 		gameAudio.enabled = value;
-
 	}
 
-	public void ClearTutorialText(){
+	public void ClearTutorialText()
+	{
 		tutorialText.GetComponent<Animator> ().SetTrigger("fadeOut");
 		StartCoroutine(TutorialTextFadeOut ());
 	}
-	void UpdateScoreText(){
+	void UpdateScoreText()
+	{
 		scoreText.text = Mathf.Round (gameManager.score).ToString ();
 	}
 		
-	void GameOver(){
+	void GameOver()
+	{
 
         ResetMenu();
 
 		highScore = PlayerPrefs.GetInt ("HighScore",0);
-		if(gameManager.score > highScore){
+		if(gameManager.score > highScore)
+		{
 			
 			PlayerPrefs.SetInt ("HighScore", (int)gameManager.score);
 		}
-
 		
         gameOverScoreText.text = Mathf.Round (gameManager.score).ToString();
-		highScoreText.text = PlayerPrefs.GetInt ("HighScore", 0).ToString ();
+	highScoreText.text = PlayerPrefs.GetInt ("HighScore", 0).ToString ();
 	}
 
     void StartMenu()
@@ -120,7 +127,6 @@ public class UIManager : MonoBehaviour {
         playButton.SetActive(true);
         resetButton.SetActive(false);
         buttonPanel.SetActive(true);
-
     }
 
     void ResetMenu()
@@ -132,10 +138,10 @@ public class UIManager : MonoBehaviour {
         buttonPanel.SetActive(true);
 
         buttonPanel.GetComponent<Animator>().SetTrigger("TriggeredBack");
-
     }
 		
-	IEnumerator TutorialTextFadeOut(){
+	IEnumerator TutorialTextFadeOut()
+	{
 		yield return new WaitForSeconds (1.3f);
 		tutorialText.SetActive (false);
 		//tutorialText.GetComponent<Text> ().color = new Color(255,255,255,255);
@@ -144,20 +150,11 @@ public class UIManager : MonoBehaviour {
     IEnumerator MainMenuAnimation()
     {
         yield return new WaitForSeconds(2.5f);
-
         mainUICanvas.SetActive(false);
         buttonPanel.SetActive(false);
-
-        
-        
-
         scoreCanvas.SetActive(true);
-
         playButton.SetActive(false);
         resetButton.SetActive(false);
-
-        
-
     }
 
     IEnumerator ResettingGame()
