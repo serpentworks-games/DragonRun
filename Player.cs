@@ -9,9 +9,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
-
-	public float speed;
+public class Player : MonoBehaviour 
+{	public float speed;
     [System.NonSerialized]
     public bool isDead;
 	public ParticleSystem blueGemParticles;
@@ -26,7 +25,8 @@ public class Player : MonoBehaviour {
 	private GameObject particleSpawn;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		dir = Vector3.zero;
 		isDead = false;
 		isMoving = false;
@@ -38,8 +38,10 @@ public class Player : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if (!Grounded () && gameManager.gameStarted == true) {
+	void Update () 
+	{
+		if (!Grounded () && gameManager.gameStarted == true) 
+		{
 			isDead = true;
 			isMoving = false;
 			GetComponent<CapsuleCollider> ().enabled = false;
@@ -49,20 +51,20 @@ public class Player : MonoBehaviour {
 			
 		if (gameManager.gameStarted == true) {
 			playerAnim.SetBool ("playGame", true);
-			if (Input.GetMouseButtonDown (0) && !isDead) {
+			if (Input.GetMouseButtonDown (0) && !isDead) 
+			{
 				isMoving = true;
-			
-				if (dir == Vector3.forward) {
+				if (dir == Vector3.forward) 
+				{
 					dir = Vector3.left;
-					
+
 					transform.GetChild (0).rotation = Quaternion.LookRotation (dir);
-					
-					
-				} else {
+				} 
+				else 
+				{
 					dir = Vector3.forward;
 					
 					transform.GetChild (0).rotation = Quaternion.LookRotation (dir);
-					
 				}
 				playerAnim.SetBool ("isMoving", true);
 			}
@@ -71,12 +73,12 @@ public class Player : MonoBehaviour {
 			
 			transform.Translate (dir * amountToMove);
 		} 
-
-
 	}
 
-	void OnCollision(Collision col){
-		if(col.gameObject.layer == 8){
+	void OnCollision(Collision col)
+	{
+		if(col.gameObject.layer == 8)
+		{
 			isDead = true;
 			isMoving = false;
 			GetComponent<CapsuleCollider> ().enabled = false;
@@ -86,16 +88,19 @@ public class Player : MonoBehaviour {
 	}
 
 	//Pick up behavior
-	void OnTriggerEnter(Collider other){
-		
-		if (other.gameObject.tag == "BlueGem") {
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.gameObject.tag == "BlueGem") 
+		{
 			//When a player hits a 'blue gem'
 
 			gameManager.score+= gameManager.blueGemPoints;
 			other.gameObject.SetActive (false);
 			Instantiate (blueGemParticles, particleSpawn.transform.position, Quaternion.identity);
 
-		} else if( other.gameObject.tag == "RedGem"){
+		} 
+		else if( other.gameObject.tag == "RedGem")
+		{
 			//When a player hits a 'red gem'
 
 			gameManager.score+= gameManager.redGemPoints;
@@ -105,7 +110,8 @@ public class Player : MonoBehaviour {
 	}
 		
 	//Checks to see if the player is grounded
-	private bool Grounded(){
+	private bool Grounded()
+	{
 		
 		Collider[] colliders = Physics.OverlapSphere (contactPoint.position, 0.3f, groundLayer);
 
@@ -117,6 +123,5 @@ public class Player : MonoBehaviour {
 		}
 
 		return false;
-	}
-		
+	}	
 }
