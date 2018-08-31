@@ -9,8 +9,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour {
-
+public class Tile : MonoBehaviour 
+{
 	//How long it takes the platform to fall
 	public float fallDelay;
 
@@ -19,36 +19,42 @@ public class Tile : MonoBehaviour {
 	public GameObject stonesList;
 
 
-	void Awake(){
+	void Awake()
+	{
 		//Find the first pick up on the object
 		pickUp = this.transform.GetChild (1).gameObject;
-		if (this.transform.childCount == 3) {
+		if (this.transform.childCount == 3) 
+		{
 			stonesList = this.transform.GetChild (2).gameObject;
-		} else {
+		} 
+		else 
+		{
 			// do nothing
 		}
 	}
 
-	void Start () {
+	void Start () 
+	{
 		//Set the falldelay to the speed set in the game manager
 		fallDelay = GameManager.Instance.tileFallSpeed;
-
 	}
 
-	void OnTriggerExit(Collider other){
-
-		if (other.tag == "Player") {
+	void OnTriggerExit(Collider other)
+	{
+		if (other.tag == "Player") 
+		{
 			// When the player exits the tile's collider, spawn the next tile, and
 			// have this tile fall down
-			if (this.transform.childCount > 0) {
-				
+			if (this.transform.childCount > 0) 
+			{	
 				TileManager.Instance.SpawnTile ();
 				StartCoroutine (FallDown ());
 			}
 		} 
 	}
 
-	IEnumerator FallDown(){
+	IEnumerator FallDown()
+	{
 		//This Enumerator controlls the falling and reseting behavior of the tiles
 		//This will repush the tiles to the stack (supposedly, this is known to break)
 
@@ -98,8 +104,6 @@ public class Tile : MonoBehaviour {
 			gameObject.GetComponent<Rigidbody> ().isKinematic = true;
 			gameObject.SetActive (false);
 			break;
-	
 		}
 	}
-
 }
