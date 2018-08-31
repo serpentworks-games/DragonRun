@@ -118,7 +118,6 @@ public class TileManager : MonoBehaviour
 	{
 		for (int i = 0; i < amount; i++) 
 		{
-
 			lt_TwinHeads.Push (Instantiate (largeTilesPrefabs [0])); //TwinHeads Tile
 			lt_Snowdrifts.Push (Instantiate (largeTilesPrefabs [1])); //Snowdrift Tile
 			tl_Island.Push (Instantiate (largeTilesPrefabs [2])); //Island Tile
@@ -153,7 +152,6 @@ public class TileManager : MonoBehaviour
 		{
 			CreateLargeTiles (10);
 		}
-
 
 		//Get random range for path tile 
 		int randomIndex = Random.Range (0, 2);
@@ -227,7 +225,6 @@ public class TileManager : MonoBehaviour
 					tmp.SetActive (true);
 					tmp.transform.position = currentTile.transform.GetChild (0).transform.GetChild (randomIndex).position;
 					currentTile = tmp;
-
 				} 
 				else if (randomIndexForLarge == 1) 
 				{ 
