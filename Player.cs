@@ -97,7 +97,6 @@ public class Player : MonoBehaviour
 			gameManager.score+= gameManager.blueGemPoints;
 			other.gameObject.SetActive (false);
 			Instantiate (blueGemParticles, particleSpawn.transform.position, Quaternion.identity);
-
 		} 
 		else if( other.gameObject.tag == "RedGem")
 		{
@@ -111,17 +110,16 @@ public class Player : MonoBehaviour
 		
 	//Checks to see if the player is grounded
 	private bool Grounded()
-	{
-		
+	{	
 		Collider[] colliders = Physics.OverlapSphere (contactPoint.position, 0.3f, groundLayer);
 
-		for (int i = 0; i < colliders.Length; i++) {
-			if (colliders[i].gameObject != gameObject) {
-
+		for (int i = 0; i < colliders.Length; i++) 
+		{
+			if (colliders[i].gameObject != gameObject) 
+			{
 				return true;
 			}
 		}
-
 		return false;
 	}	
 }
