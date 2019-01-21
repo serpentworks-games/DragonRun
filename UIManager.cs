@@ -58,7 +58,7 @@ public class UIManager : MonoBehaviour
 	void Update () 
 	{
 		UpdateScoreText ();
-		if(player.isDead
+		if(player.isDead)
 		{
 			GameOver ();
 		}
