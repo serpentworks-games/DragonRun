@@ -18,14 +18,20 @@ public class Player : MonoBehaviour
 	public LayerMask groundLayer;
 	public Transform contactPoint;
 
+    public AudioClip blueGemSound;
+    public AudioClip redGemSound;
+    public AudioClip deathSound;
+
 	private Vector3 dir;
 	private bool isMoving;
 	private Animator playerAnim;
 	private GameManager gameManager;
 	private GameObject particleSpawn;
+    private AudioSource deathAudioSource;
+    private AudioSource gemAudioSource;
 
-	// Use this for initialization
-	void Start () 
+    // Use this for initialization
+    void Start () 
 	{
 		dir = Vector3.zero;
 		isDead = false;
@@ -33,21 +39,27 @@ public class Player : MonoBehaviour
 		playerAnim = GetComponent<Animator> ();
 		playerAnim.SetBool ("isMoving",false);
 		gameManager = FindObjectOfType<GameManager> ();
-		speed = gameManager.playerSpeed;
+        deathAudioSource = GameObject.Find("DragonDeathFX").GetComponent<AudioSource>();
+        gemAudioSource = GameObject.Find("DragonSoundFX").GetComponent<AudioSource>();
+        speed = gameManager.playerSpeed;
 		particleSpawn = GameObject.Find ("ParticleSpawnPoint");
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if (!Grounded () && gameManager.gameStarted == true) 
+		if (!Grounded () && gameManager.gameStarted == true && isDead == false) 
 		{
 			isDead = true;
 			isMoving = false;
 			GetComponent<CapsuleCollider> ().enabled = false;
 			playerAnim.SetBool ("isDead", true);
-			Debug.Log ("Dead to falling.");
-		}
+            if (!deathAudioSource.isPlaying)
+            {
+                deathAudioSource.PlayOneShot(deathSound);
+            }
+            
+        }
 			
 		if (gameManager.gameStarted == true) {
 			playerAnim.SetBool ("playGame", true);
@@ -83,8 +95,11 @@ public class Player : MonoBehaviour
 			isMoving = false;
 			GetComponent<CapsuleCollider> ().enabled = false;
 			playerAnim.SetBool ("isDead", true);
-			Debug.Log ("Dead due to Wall!");
-		}
+            if (!deathAudioSource.isPlaying)
+            {
+                deathAudioSource.PlayOneShot(deathSound);
+            }
+        }
 	}
 
 	//Pick up behavior
@@ -97,6 +112,7 @@ public class Player : MonoBehaviour
 			gameManager.score+= gameManager.blueGemPoints;
 			other.gameObject.SetActive (false);
 			Instantiate (blueGemParticles, particleSpawn.transform.position, Quaternion.identity);
+            gemAudioSource.PlayOneShot(blueGemSound);
 		} 
 		else if( other.gameObject.tag == "RedGem")
 		{
@@ -105,7 +121,8 @@ public class Player : MonoBehaviour
 			gameManager.score+= gameManager.redGemPoints;
 			other.gameObject.SetActive (false);
 			Instantiate (redGemParticles, particleSpawn.transform.position, Quaternion.identity);
-		}
+            gemAudioSource.PlayOneShot(redGemSound);
+        }
 	}
 		
 	//Checks to see if the player is grounded

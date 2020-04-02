@@ -12,6 +12,13 @@ using System.Runtime.InteropServices;
 
 public class TileManager : MonoBehaviour
 {
+    public int tilesToSpawn;
+    public int additionalTilesToSpawn;
+    public int largeTilesToSpawn;
+    public int addLargeTilesToSpawn;
+    public int minTileCount;
+    public int maxTileCount;
+
 	//Arrays to hold the tile prefabs, assigned in editor
 	public GameObject[] tilesPrefabs;
 	public GameObject[] largeTilesPrefabs;
@@ -88,8 +95,8 @@ public class TileManager : MonoBehaviour
 	void Start ()
 	{
 		gameManager = FindObjectOfType<GameManager> ();
-		CreateTiles (50);
-		//CreateLargeTiles (0);
+		CreateTiles (tilesToSpawn);
+		CreateLargeTiles (largeTilesToSpawn);
 
 		for (int i = 0; i < 30; i++) 
 		{
@@ -140,17 +147,17 @@ public class TileManager : MonoBehaviour
 		//These make sure we always have tiles to pull from, even if they do not get put back into the stack
 		if (leftTiles.Count == 0 || topTiles.Count == 0)
 		{
-			CreateTiles (10);
+			CreateTiles (additionalTilesToSpawn);
 		}
 
 		if (lt_TwinHeads.Count == 0 || lt_Snowdrifts.Count == 0) 
 		{
-			CreateLargeTiles (10);
+			CreateLargeTiles (addLargeTilesToSpawn);
 		}
 
 		if (tl_Island.Count == 0 || tl_Lava.Count == 0) 
 		{
-			CreateLargeTiles (10);
+			CreateLargeTiles (addLargeTilesToSpawn);
 		}
 
 		//Get random range for path tile 
@@ -204,16 +211,9 @@ public class TileManager : MonoBehaviour
 				// Do nothing!
 			}
 		} 
-		else 
-		{
-			if (currentTile.transform.childCount == 2)
-			{
-			 //TODO: Fix this section apparently this never finishhhhheeedd?????
-			}
-		}
 		
 		//Large tiles
-		if (gameManager.tileCount > 45 && gameManager.tileCount < 60) 
+		if (gameManager.tileCount > minTileCount && gameManager.tileCount < maxTileCount) 
 		{
 			if (randomIndex == 0) 
 			{

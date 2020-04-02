@@ -31,11 +31,17 @@ public class UIManager : MonoBehaviour
     [Header("Misc")]
 	public Player player;
 	public GameManager gameManager;
-	public AudioListener gameAudio;
+	private AudioSource musicSource;
+    private AudioSource gameOverSource;
+    public AudioClip music;
+    public AudioClip gameOverSound;
+    public AudioSource[] audioSources;
 
 
 	private static UIManager instance;
 	private int highScore;
+    private float startMusicVol;
+    private float startGOVol;
 
 	public static UIManager Instance 
 	{
@@ -51,8 +57,14 @@ public class UIManager : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+        musicSource = GameObject.Find("Music").GetComponent<AudioSource>();
+        gameOverSource = GameObject.Find("GameOver").GetComponent<AudioSource>();
+        startMusicVol = musicSource.volume;
+
+        audioSources = FindObjectsOfType<AudioSource>();
+
         StartMenu();
-    	}
+    }
 
 	// Update is called once per frame
 	void Update () 
@@ -66,7 +78,6 @@ public class UIManager : MonoBehaviour
 
 	public void ResetGame()
 	{
-
         StartCoroutine(ResettingGame());
     }
 
@@ -90,7 +101,10 @@ public class UIManager : MonoBehaviour
 
 	public void DisableAudio(bool value)
 	{
-		gameAudio.enabled = value;
+            for (int i = 0; i < audioSources.Length; i++)
+            {
+                audioSources[i].mute = value;
+            }
 	}
 
 	public void ClearTutorialText()
@@ -105,19 +119,25 @@ public class UIManager : MonoBehaviour
 		
 	void GameOver()
 	{
-
         ResetMenu();
+
+        musicSource.volume = Mathf.Lerp(musicSource.volume, 0.05f, Time.deltaTime);
+        if (!gameOverSource.isPlaying)
+        {
+            gameOverSource.PlayOneShot(gameOverSound);
+        }
 
 		highScore = PlayerPrefs.GetInt ("HighScore",0);
 		if(gameManager.score > highScore)
 		{
-			
 			PlayerPrefs.SetInt ("HighScore", (int)gameManager.score);
 		}
 		
         gameOverScoreText.text = Mathf.Round (gameManager.score).ToString();
-	highScoreText.text = PlayerPrefs.GetInt ("HighScore", 0).ToString ();
-	}
+	    highScoreText.text = PlayerPrefs.GetInt ("HighScore", 0).ToString ();
+        gameOverSource.gameObject.SetActive(false);
+
+    }
 
     void StartMenu()
     {
@@ -127,6 +147,8 @@ public class UIManager : MonoBehaviour
         playButton.SetActive(true);
         resetButton.SetActive(false);
         buttonPanel.SetActive(true);
+        gameOverSource.gameObject.SetActive(true);
+
     }
 
     void ResetMenu()
@@ -144,7 +166,6 @@ public class UIManager : MonoBehaviour
 	{
 		yield return new WaitForSeconds (1.3f);
 		tutorialText.SetActive (false);
-		//tutorialText.GetComponent<Text> ().color = new Color(255,255,255,255);
 	}
 
     IEnumerator MainMenuAnimation()
@@ -160,13 +181,13 @@ public class UIManager : MonoBehaviour
     IEnumerator ResettingGame()
     {
         resetButton.SetActive(false);
-
+        
         yield return new WaitForSeconds(0.5f);
 
         SceneManager.LoadScene("DragonRun");
-
         gameManager.gameStarted = false;
-
+        gameOverSource.gameObject.SetActive(true);
         StartMenu();
+        musicSource.volume = 0.55f;
     }
 }

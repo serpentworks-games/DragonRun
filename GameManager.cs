@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Screen.SetResolution(768, 1024, false); //Set screen size
+        Screen.SetResolution(500, 500, false); //Set screen size
 		uiCanvas.SetActive (true);
 		player = FindObjectOfType<Player> ();
 		tileManager = FindObjectOfType<TileManager> ();
